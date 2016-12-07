@@ -1,22 +1,5 @@
 $ = require('jQuery');
 
-// var [
-//   {
-//     id: uuid(),
-//     text: 'Run',
-//     completed: false
-//   },
-//   {
-//     id: uuid(),
-//     text: 'Learn React',
-//     completed: false
-//   },
-//   {
-//     id: uuid(),
-//     text: 'Cook',
-//     completed: false
-//   }
-// ]
 module.exports = {
   setTodos: function(todos){
     if($.isArray(todos)){
@@ -33,5 +16,25 @@ module.exports = {
 
     }
     return $.isArray(todos)? todos : [];
+  },
+  filterTodos: function(todos, showCompleted, searchText){
+    var filterTodos = todos;
+    filterTodos = filterTodos.filter((todo)=>{
+      return !todo.completed || showCompleted;
+    });
+    filterTodos = filterTodos.filter((todo)=>{
+      var text = todo.text.toLowerCase();
+      return searchText === '' || text.indexOf(searchText)>=0;
+    });
+    filterTodos.sort((a,b)=>{
+      if(!a.completed && b.completed){
+        return -1;
+      } else if(a.completed && !b.completed){
+        return 1;
+      } else {
+        return 0;
+      }
+    })
+    return filterTodos;
   }
 }
